@@ -74,6 +74,42 @@ activities = {
         "schedule": "Thursdays, 3:30 PM - 5:00 PM",
         "max_participants": 22,
         "participants": ["rachel@mergington.edu", "david@mergington.edu"]
+    },
+    "Soccer Team": {
+        "description": "Competitive soccer team for intramural matches and tournaments",
+        "schedule": "Tuesdays and Thursdays, 4:00 PM - 5:30 PM",
+        "max_participants": 18,
+        "participants": ["marcus@mergington.edu", "chelsea@mergington.edu"]
+    },
+    "Volleyball Club": {
+        "description": "Develop volleyball skills and participate in friendly competitions",
+        "schedule": "Mondays and Wednesdays, 3:00 PM - 4:30 PM",
+        "max_participants": 14,
+        "participants": ["jessica@mergington.edu"]
+    },
+    "Theater Club": {
+        "description": "Perform in school plays and develop acting and stagecraft skills",
+        "schedule": "Mondays, Wednesdays, Fridays, 3:30 PM - 5:00 PM",
+        "max_participants": 20,
+        "participants": ["noah@mergington.edu", "ava@mergington.edu"]
+    },
+    "Photography Club": {
+        "description": "Learn photography techniques and explore digital image editing",
+        "schedule": "Tuesdays and Saturdays, 3:30 PM - 4:30 PM",
+        "max_participants": 12,
+        "participants": ["isabella@mergington.edu"]
+    },
+    "Robotics Club": {
+        "description": "Build and program robots to compete in regional competitions",
+        "schedule": "Thursdays and Saturdays, 4:00 PM - 5:30 PM",
+        "max_participants": 15,
+        "participants": ["ethan@mergington.edu", "mia@mergington.edu"]
+    },
+    "English Literature Society": {
+        "description": "Discuss classic and contemporary literature through book clubs and essays",
+        "schedule": "Wednesdays and Fridays, 3:30 PM - 4:30 PM",
+        "max_participants": 18,
+        "participants": ["harper@mergington.edu"]
     }
 }
 
@@ -105,6 +141,11 @@ def signup_for_activity(activity_name: str, email: str):
     # Validate activity is not full
     if len(activity["participants"]) >= activity["max_participants"]:
         raise HTTPException(status_code=400, detail="Activity is full")
+    
+    # Validate student is not already signed up for another activity at the same time
+    for other_activity in activities.values():
+        if email in other_activity["participants"] and other_activity["schedule"] == activity["schedule"]:
+            raise HTTPException(status_code=400, detail="Student already signed up for another activity at the same time")
 
     # Add student
     activity["participants"].append(email)
